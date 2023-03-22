@@ -33,7 +33,7 @@ export class UsersController {
         name: email.substring(0, email.indexOf('@')).replaceAll('.', ''),
       };
       const token = jwt.sign(
-        { userId: payload.userId },
+        { userId: payload.userId, email: payload.email },
         process.env.JWT_SECRET,
         { expiresIn: '365d' },
       );
@@ -43,7 +43,7 @@ export class UsersController {
       return this.usersService.sendEmail(email, token, verify);
     } else {
       const token = jwt.sign(
-        { userId: user[0].userId },
+        { userId: user[0].userId, email: user[0].email },
         process.env.JWT_SECRET,
         { expiresIn: '365d' },
       );
@@ -58,26 +58,35 @@ export class UsersController {
     return user.length ? null : this.usersService.create(payload);
   }
 
+  @Get('user')
+  async isUser(@Req() req: Request) {
+    const token = req.cookies.token;
+    const { userId } = await this.usersService.jwtVerify(token);
+    const [{ name, username, email }] = await this.usersService.findUserId(
+      userId,
+    );
+    const payload = { name, username, email, userId };
+    return JSON.stringify(payload);
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  // Not in use
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
-  }
-
+  // Not in use
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
+  // Not in use
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);

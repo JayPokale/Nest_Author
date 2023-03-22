@@ -17,22 +17,25 @@ export class UsersService {
     return new this.UserModel(createUserDto).save();
   }
 
+  // Not in use
   async findAll() {
     return this.UserModel.find();
   }
 
   async findEmail(email: string) {
-    return this.UserModel.find({ email: email });
+    return this.UserModel.find({ email });
   }
 
-  async findOne(id: string) {
-    return this.UserModel.findById(id);
+  async findUserId(userId: string) {
+    return this.UserModel.find({ userId });
   }
 
+  // Not in use
   async update(_id: string, updateUserDto: UpdateUserDto) {
     return this.UserModel.updateOne({ _id }, { $set: updateUserDto });
   }
 
+  // Not in use
   async remove(_id: string) {
     return this.UserModel.deleteOne({ _id });
   }
