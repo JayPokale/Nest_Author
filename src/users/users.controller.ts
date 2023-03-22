@@ -12,7 +12,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Request, response } from 'express';
+import { Request } from 'express';
 import { randomBytes } from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { ConfigModule } from '@nestjs/config';
@@ -49,7 +49,6 @@ export class UsersController {
           process.env.JWT_SECRET,
           { expiresIn: '365d' },
         );
-
         return this.usersService.sendEmail(email, token, null);
       }
     } catch (err) {
@@ -62,16 +61,18 @@ export class UsersController {
     try {
       const payload = await this.usersService.jwtVerify(token);
       const user = await this.usersService.findEmail(payload.email);
-      return user.length ? null : this.usersService.create(payload);
+      if (!user.length) this.usersService.create(payload);
+      return JSON.stringify(payload);
     } catch (err) {
       return 'An error occured';
     }
   }
 
-  @Get('user')
+  @Get('this')
   async isUser(@Req() req: Request) {
     try {
       const token = req.cookies.token;
+      if (!token) return;
       const { userId } = await this.usersService.jwtVerify(token);
       const [{ name, username, email }] = await this.usersService.findUserId(
         userId,

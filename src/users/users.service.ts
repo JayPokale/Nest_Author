@@ -50,7 +50,7 @@ export class UsersService {
       subject: 'Verification email for AuthorsLog',
       from: 'jay.pokale.35@gmail.com',
       text: 'Authenticate using this link',
-      html: `<a href=${process.env.FRONTEND_URI}/verify?token=${token}${
+      html: `<a href=${process.env.FRONTEND_URI}?token=${token}${
         verify ? `&verify=${verify}` : ''
       }>AuthorsLog.com</a>`,
     };
