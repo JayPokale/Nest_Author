@@ -14,7 +14,11 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    return new this.UserModel(createUserDto).save();
+    try {
+      return new this.UserModel(createUserDto).save();
+    } catch (err) {
+      return 'An error occured';
+    }
   }
 
   // Not in use
