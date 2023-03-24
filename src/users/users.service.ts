@@ -17,7 +17,7 @@ export class UsersService {
     try {
       return new this.UserModel(createUserDto).save();
     } catch (err) {
-      return 'An error occured';
+      return { err: 'An error occured' };
     }
   }
 
@@ -60,6 +60,18 @@ export class UsersService {
     } catch (err) {
       // By this, hackers don't get if email exist in database
       return JSON.stringify({ msg: 'Check your email within 1 hour' });
+    }
+  }
+
+  async getUser(token: string) {
+    try {
+      if (!token) return;
+      const { userId } = await this.jwtVerify(token);
+      const [{ name, username, email }] = await this.findUserId(userId);
+      const payload = { name, username, email, userId };
+      return payload;
+    } catch (err) {
+      return { err: 'An error occured', userId: null };
     }
   }
 

@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, now } from 'mongoose';
 
-export type UserDocument = HydratedDocument<User>;
+export type CommentDocument = HydratedDocument<Comment>;
 
-@Schema()
-export class User {
+@Schema({ timestamps: true })
+export class Comment {
   @Prop({ type: String, required: true })
   commentId: string;
 
@@ -19,6 +19,12 @@ export class User {
 
   @Prop({ type: Boolean, required: true, default: false })
   deleted: boolean;
+
+  @Prop({ default: now() })
+  createdAt: Date;
+
+  @Prop({ default: now() })
+  updatedAt: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const CommentSchema = SchemaFactory.createForClass(Comment);

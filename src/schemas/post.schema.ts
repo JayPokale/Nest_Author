@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument, now } from 'mongoose';
 
-export type postDocument = HydratedDocument<post>;
+export type PostDocument = HydratedDocument<Post>;
 
-@Schema()
-export class post {
+@Schema({ timestamps: true })
+export class Post {
   @Prop({ type: String, required: true })
   postId: string;
 
@@ -20,8 +20,8 @@ export class post {
   @Prop(String)
   thumbnail: string;
 
-  @Prop(String)
-  content: string;
+  @Prop({ type: mongoose.Schema.Types.Mixed })
+  content: { type: mongoose.Schema.Types.Mixed };
 
   @Prop({ type: Boolean, required: true, default: true })
   active: boolean;
@@ -40,6 +40,12 @@ export class post {
 
   @Prop(Number)
   saves: number;
+
+  @Prop({ default: now() })
+  createdAt: Date;
+
+  @Prop({ default: now() })
+  updatedAt: Date;
 }
 
-export const postSchema = SchemaFactory.createForClass(post);
+export const PostSchema = SchemaFactory.createForClass(Post);

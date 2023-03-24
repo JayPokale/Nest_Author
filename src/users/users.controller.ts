@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   Req,
-  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -52,7 +51,7 @@ export class UsersController {
         return this.usersService.sendEmail(email, token, null);
       }
     } catch (err) {
-      return 'An error occured';
+      return { err: 'An error occured' };
     }
   }
 
@@ -64,24 +63,13 @@ export class UsersController {
       if (!user.length) this.usersService.create(payload);
       return JSON.stringify(payload);
     } catch (err) {
-      return 'An error occured';
+      return { err: 'An error occured' };
     }
   }
 
   @Get('this')
-  async isUser(@Req() req: Request) {
-    try {
-      const token = req.cookies.token;
-      if (!token) return;
-      const { userId } = await this.usersService.jwtVerify(token);
-      const [{ name, username, email }] = await this.usersService.findUserId(
-        userId,
-      );
-      const payload = { name, username, email, userId };
-      return JSON.stringify(payload);
-    } catch (err) {
-      return 'An error occured';
-    }
+  async getUser(@Req() req: Request) {
+    return JSON.stringify(this.usersService.getUser(req.cookies.token));
   }
 
   @Post()
@@ -89,7 +77,7 @@ export class UsersController {
     try {
       return this.usersService.create(createUserDto);
     } catch (err) {
-      return 'An error occured';
+      return { err: 'An error occured' };
     }
   }
 
