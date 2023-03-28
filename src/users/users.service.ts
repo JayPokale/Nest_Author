@@ -21,27 +21,12 @@ export class UsersService {
     }
   }
 
-  // Not in use
-  async findAll() {
-    return this.UserModel.find();
-  }
-
   async findEmail(email: string) {
     return this.UserModel.find({ email });
   }
 
   async findUserId(userId: string) {
     return this.UserModel.find({ userId });
-  }
-
-  // Not in use
-  async update(_id: string, updateUserDto: UpdateUserDto) {
-    return this.UserModel.updateOne({ _id }, { $set: updateUserDto });
-  }
-
-  // Not in use
-  async remove(_id: string) {
-    return this.UserModel.deleteOne({ _id });
   }
 
   async sendEmail(email: string, token: string, verify: string) {
@@ -65,12 +50,14 @@ export class UsersService {
 
   async getUser(token: string) {
     try {
-      if (!token) return;
+      if (!token) return { err: 'An error occured', userId: null };
       const { userId } = await this.jwtVerify(token);
       const [{ name, username, email }] = await this.findUserId(userId);
       const payload = { name, username, email, userId };
+      console.log(payload)
       return payload;
     } catch (err) {
+      console.log(err)
       return { err: 'An error occured', userId: null };
     }
   }

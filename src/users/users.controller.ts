@@ -69,7 +69,7 @@ export class UsersController {
 
   @Get('this')
   async getUser(@Req() req: Request) {
-    return JSON.stringify(this.usersService.getUser(req.cookies.token));
+    return this.usersService.getUser(req.cookies.token);
   }
 
   @Post()
@@ -79,23 +79,5 @@ export class UsersController {
     } catch (err) {
       return { err: 'An error occured' };
     }
-  }
-
-  // Not in use
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  // Not in use
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
-  }
-
-  // Not in use
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
   }
 }

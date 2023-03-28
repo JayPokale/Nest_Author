@@ -47,16 +47,16 @@ export class User {
   @Prop([String])
   comments: string[];
 
-  @Prop(Number)
+  @Prop({ type: Number, default: 0 })
   likes: number;
 
-  @Prop(Number)
+  @Prop({ type: Number, default: 0 })
   views: number;
 
-  @Prop(Number)
+  @Prop({ type: Number, default: 0 })
   saves: number;
 
-  @Prop(Number)
+  @Prop({ type: Number, default: 0 })
   followers: number;
 
   @Prop({ default: now() })

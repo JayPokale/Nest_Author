@@ -11,6 +11,12 @@ export class Post {
   @Prop({ type: String, required: true })
   userId: string;
 
+  @Prop(String)
+  profilePhoto: string;
+
+  @Prop(String)
+  name: string;
+
   @Prop({ type: String, required: true })
   title: string;
 
@@ -20,11 +26,14 @@ export class Post {
   @Prop(String)
   thumbnail: string;
 
-  @Prop({ type: mongoose.Schema.Types.Mixed })
-  content: { type: mongoose.Schema.Types.Mixed };
+  @Prop([{ type: String, data: Object }])
+  content: { type: string; data: object }[];
 
   @Prop({ type: Boolean, required: true, default: true })
   active: boolean;
+
+  @Prop({ type: Boolean, required: true, default: false })
+  deleted: boolean;
 
   @Prop([String])
   comments: string[];
