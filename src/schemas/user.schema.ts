@@ -32,6 +32,9 @@ export class User {
   @Prop(String)
   profilePhoto: string;
 
+  @Prop([{ platform: String, link: String }])
+  socialLinks: { platform: string; link: string }[];
+
   @Prop([String])
   posts: string[];
 
