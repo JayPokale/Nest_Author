@@ -41,10 +41,10 @@ export class UsersService {
     };
     try {
       await sgMail.send(mail);
-      return JSON.stringify({ msg: 'Check your email within 1 hour' });
+      return JSON.stringify({ msg: 'Check your email' });
     } catch (err) {
       // By this, hackers don't get if email exist in database
-      return JSON.stringify({ msg: 'Check your email within 1 hour' });
+      return JSON.stringify({ msg: 'Check your email' });
     }
   }
 
@@ -54,12 +54,16 @@ export class UsersService {
       const { userId } = await this.jwtVerify(token);
       const [{ name, username, email }] = await this.findUserId(userId);
       const payload = { name, username, email, userId };
-      console.log(payload)
+      console.log(payload);
       return payload;
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return { err: 'An error occured', userId: null };
     }
+  }
+
+  async postId(userId: string, postId: string) {
+    this.UserModel.updateOne({ userId }, { $push: { posts: postId } });
   }
 
   async jwtVerify(token: string) {

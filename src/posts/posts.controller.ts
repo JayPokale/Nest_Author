@@ -41,10 +41,12 @@ export class PostsController {
         payload.profilePhoto = postUser[0].profilePhoto;
         payload.userId = user.userId;
         payload.postId = randomBytes(7).toString('base64').substring(0, 10);
-        return this.postsService.create(payload as postPayload);
-      } else return { err: 'An error occured 1' };
+        const post = this.postsService.create(payload as postPayload);
+        this.userServise.postId(payload.userId, payload.postId);
+        return post;
+      } else return { err: 'An error occured' };
     } catch (err) {
-      return { err: 'An error occured 2' };
+      return { err: 'An error occured' };
     }
   }
 
@@ -73,7 +75,7 @@ export class PostsController {
   }
 
   @Get(':skip/:limit')
-  findWithSkip(@Param('skip') skip: number, @Param('limit') limit: number ) {
+  findWithSkip(@Param('skip') skip: number, @Param('limit') limit: number) {
     return this.postsService.findWithSkip(skip, limit);
   }
 

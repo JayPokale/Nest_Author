@@ -14,7 +14,7 @@ export class PostsService {
       return new this.PostModel(payload).save();
     } catch (err) {
       console.log(err);
-      return { err };
+      return { err: "An error occures", postId: null };
     }
   }
 
