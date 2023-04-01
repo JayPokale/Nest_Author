@@ -12,9 +12,8 @@ export class PostsService {
   async create(payload: postPayload) {
     try {
       return new this.PostModel(payload).save();
-    } catch (err) {
-      console.log(err);
-      return { err: "An error occures", postId: null };
+    } catch (error) {
+      return { error: "An error occures", postId: null };
     }
   }
 

@@ -48,7 +48,10 @@ export class User {
   saved: string[];
 
   @Prop([String])
-  comments: string[];
+  commented: string[];
+
+  @Prop([String])
+  followed: string[];
 
   @Prop({ type: Number, default: 0 })
   likes: number;
@@ -58,6 +61,9 @@ export class User {
 
   @Prop({ type: Number, default: 0 })
   saves: number;
+
+  @Prop({ type: Number, default: 0 })
+  comments: number;
 
   @Prop({ type: Number, default: 0 })
   followers: number;

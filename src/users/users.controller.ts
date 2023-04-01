@@ -50,8 +50,8 @@ export class UsersController {
         );
         return this.usersService.sendEmail(email, token, null);
       }
-    } catch (err) {
-      return { err: 'An error occured' };
+    } catch (error) {
+      return { error: 'An error occured' };
     }
   }
 
@@ -62,8 +62,8 @@ export class UsersController {
       const user = await this.usersService.findEmail(payload.email);
       if (!user.length) this.usersService.create(payload);
       return JSON.stringify(payload);
-    } catch (err) {
-      return { err: 'An error occured' };
+    } catch (error) {
+      return { error: 'An error occured' };
     }
   }
 
@@ -76,8 +76,44 @@ export class UsersController {
   create(@Body() createUserDto: CreateUserDto) {
     try {
       return this.usersService.create(createUserDto);
-    } catch (err) {
-      return { err: 'An error occured' };
+    } catch (error) {
+      return { error: 'An error occured' };
+    }
+  }
+
+  @Get('user/:userid')
+  async userProfile(@Param('userid') userid: string, @Req() req: Request) {
+    try {
+    if (req.cookies.token)
+      var { userId } = await this.usersService.jwtVerify(req.cookies.token);
+    const user = await this.usersService.findUserId(userid);
+    if (!user.length || user[0].blocked) return { error: 'An error occured' };
+    const payload: any = {
+      name: user[0].name,
+      username: user[0].username,
+      userId: user[0].userId,
+      bio: user[0].bio,
+      about: user[0].about,
+      location: user[0].location,
+      profilePhoto: user[0].profilePhoto,
+      socialLinks: user[0].socialLinks,
+      likes: user[0].likes,
+      views: user[0].views,
+      saves: user[0].saves,
+      comments: user[0].comments,
+      followers: user[0].followers,
+      totalPosts: user[0].posts.length
+    };
+    if (userid === userId) {
+      payload.followed = user[0].followed;
+      payload.posts = user[0].posts;
+      payload.liked = user[0].liked;
+      payload.viewed = user[0].viewed;
+      payload.saved = user[0].saved;
+    }
+    return payload;
+    } catch (error) {
+      return { error: 'An error occured' };
     }
   }
 }

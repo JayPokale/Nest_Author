@@ -44,9 +44,9 @@ export class PostsController {
         const post = this.postsService.create(payload as postPayload);
         this.userServise.postId(payload.userId, payload.postId);
         return post;
-      } else return { err: 'An error occured' };
-    } catch (err) {
-      return { err: 'An error occured' };
+      } else return { error: 'An error occured' };
+    } catch (error) {
+      return { error: 'An error occured' };
     }
   }
 
@@ -54,7 +54,7 @@ export class PostsController {
   async customFetch(@Param('postId') postId: string) {
     try {
       const post: any = await this.postsService.findPost(postId);
-      if (!post.length || !post[0].active) return { err: 'An error occured' };
+      if (!post.length || !post[0].active) return { error: 'An error occured' };
       const user: any = await this.userServise.findUserId(post[0].userId);
 
       return JSON.stringify({
@@ -69,8 +69,8 @@ export class PostsController {
           followers: user[0].followers,
         },
       });
-    } catch (err) {
-      return { err: 'An error occured' };
+    } catch (error) {
+      return { error: 'An error occured' };
     }
   }
 

@@ -16,8 +16,8 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     try {
       return new this.UserModel(createUserDto).save();
-    } catch (err) {
-      return { err: 'An error occured' };
+    } catch (error) {
+      return { error: 'An error occured' };
     }
   }
 
@@ -42,7 +42,7 @@ export class UsersService {
     try {
       await sgMail.send(mail);
       return JSON.stringify({ msg: 'Check your email' });
-    } catch (err) {
+    } catch (error) {
       // By this, hackers don't get if email exist in database
       return JSON.stringify({ msg: 'Check your email' });
     }
@@ -50,15 +50,14 @@ export class UsersService {
 
   async getUser(token: string) {
     try {
-      if (!token) return { err: 'An error occured', userId: null };
+      if (!token) return { error: 'An error occured', userId: null };
       const { userId } = await this.jwtVerify(token);
       const [{ name, username, email }] = await this.findUserId(userId);
       const payload = { name, username, email, userId };
-      console.log(payload);
       return payload;
-    } catch (err) {
-      console.log(err);
-      return { err: 'An error occured', userId: null };
+    } catch (error) {
+      console.log(error);
+      return { error: 'An error occured', userId: null };
     }
   }
 
