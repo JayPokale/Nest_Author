@@ -30,7 +30,7 @@ export class PostsController {
     private readonly userServise: UsersService,
   ) {}
 
-  @Post()
+  @Post('upload')
   async create(@Req() req: Request) {
     try {
       const user = await this.userServise.getUser(req.cookies.token);
@@ -57,7 +57,7 @@ export class PostsController {
       if (!post.length || !post[0].active) return { error: 'An error occured' };
       const user: any = await this.userServise.findUserId(post[0].userId);
 
-      return JSON.stringify({
+      return {
         post: post[0],
         user: {
           name: user[0].name,
@@ -68,9 +68,20 @@ export class PostsController {
           profilePhoto: user[0].profilePhoto,
           followers: user[0].followers,
         },
-      });
+      };
     } catch (error) {
       return { error: 'An error occured' };
+    }
+  }
+
+  @Get('fetchforedit/:postId')
+  async fetchForEdit(@Param('postId') postId: string) {
+    try {
+      const post: any = await this.postsService.findPost(postId);
+      if (!post.length || !post[0].active) return { error: 'An error occured a' };
+      return post[0];
+    } catch (error) {
+      return { error: 'An error occured b' };
     }
   }
 
@@ -85,10 +96,22 @@ export class PostsController {
     return this.postsService.findOne(+id);
   }
 
-  // Note in use
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  @Patch(':postId')
+  async update(
+    @Param('postId') postId: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @Req() req: Request,
+  ) {
+    try {
+      const user = await this.userServise.getUser(req.cookies.token);
+      if (user.userId) {
+        return this.postsService.update(postId, updatePostDto);
+      } else {
+        return { error: 'An error occured' };
+      }
+    } catch (error) {
+      return { error: 'An error occured' };
+    }
   }
 
   // Note in use

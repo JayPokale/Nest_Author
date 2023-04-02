@@ -13,7 +13,7 @@ export class PostsService {
     try {
       return new this.PostModel(payload).save();
     } catch (error) {
-      return { error: "An error occures", postId: null };
+      return { error: 'An error occures', postId: null };
     }
   }
 
@@ -29,8 +29,8 @@ export class PostsService {
     return `This action returns a #${id} post`;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  update(postId: string, updatePostDto: UpdatePostDto) {
+    return this.PostModel.updateOne({ postId }, { $set: updatePostDto });
   }
 
   remove(id: number) {
