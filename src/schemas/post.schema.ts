@@ -32,9 +32,6 @@ export class Post {
   @Prop({ type: Boolean, required: true, default: true })
   active: boolean;
 
-  @Prop({ type: Boolean, required: true, default: false })
-  deleted: boolean;
-
   @Prop([String])
   comments: string[];
 

@@ -33,7 +33,7 @@ export class PostsService {
     return this.PostModel.updateOne({ postId }, { $set: updatePostDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  remove(postId: string) {
+    return this.PostModel.deleteOne({ postId });
   }
 }

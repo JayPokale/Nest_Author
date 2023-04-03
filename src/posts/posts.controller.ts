@@ -114,9 +114,8 @@ export class PostsController {
     }
   }
 
-  // Note in use
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  @Delete(':postId')
+  remove(@Param('postId') postId: string) {
+    return this.postsService.remove(postId);
   }
 }
