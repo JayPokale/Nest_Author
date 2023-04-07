@@ -69,6 +69,7 @@ export class UsersController {
 
   @Get('this')
   async getUser(@Req() req: Request) {
+    console.log(req.cookies.token)
     return this.usersService.getUser(req.cookies.token);
   }
 
