@@ -56,7 +56,7 @@ export class UsersService {
       const payload = { name, username, email, userId };
       return payload;
     } catch (error) {
-      return { error, userId: null };
+      return { error: 'An error occured', userId: null };
     }
   }
 

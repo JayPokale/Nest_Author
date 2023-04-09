@@ -69,7 +69,6 @@ export class UsersController {
 
   @Get('this')
   async getUser(@Req() req: Request) {
-    console.log(req.cookies.token)
     return this.usersService.getUser(req.cookies.token);
   }
 
@@ -82,37 +81,43 @@ export class UsersController {
     }
   }
 
+  @Get('checktoken')
+  async checktoken(@Req() req: Request) {
+    console.log(req.cookies.token);
+    return this.usersService.jwtVerify(req.cookies.token);
+  }
+
   @Get('user/:userid')
   async userProfile(@Param('userid') userid: string, @Req() req: Request) {
     try {
-    if (req.cookies.token)
-      var { userId } = await this.usersService.jwtVerify(req.cookies.token);
-    const user = await this.usersService.findUserId(userid);
-    if (!user.length || user[0].blocked) return { error: 'An error occured' };
-    const payload: any = {
-      name: user[0].name,
-      username: user[0].username,
-      userId: user[0].userId,
-      bio: user[0].bio,
-      about: user[0].about,
-      location: user[0].location,
-      profilePhoto: user[0].profilePhoto,
-      socialLinks: user[0].socialLinks,
-      likes: user[0].likes,
-      views: user[0].views,
-      saves: user[0].saves,
-      comments: user[0].comments,
-      followers: user[0].followers,
-      totalPosts: user[0].posts.length
-    };
-    if (userid === userId) {
-      payload.followed = user[0].followed;
-      payload.posts = user[0].posts;
-      payload.liked = user[0].liked;
-      payload.viewed = user[0].viewed;
-      payload.saved = user[0].saved;
-    }
-    return payload;
+      if (req.cookies.token)
+        var { userId } = await this.usersService.jwtVerify(req.cookies.token);
+      const user = await this.usersService.findUserId(userid);
+      if (!user.length || user[0].blocked) return { error: 'An error occured' };
+      const payload: any = {
+        name: user[0].name,
+        username: user[0].username,
+        userId: user[0].userId,
+        bio: user[0].bio,
+        about: user[0].about,
+        location: user[0].location,
+        profilePhoto: user[0].profilePhoto,
+        socialLinks: user[0].socialLinks,
+        likes: user[0].likes,
+        views: user[0].views,
+        saves: user[0].saves,
+        comments: user[0].comments,
+        followers: user[0].followers,
+        totalPosts: user[0].posts.length,
+      };
+      if (userid === userId) {
+        payload.followed = user[0].followed;
+        payload.posts = user[0].posts;
+        payload.liked = user[0].liked;
+        payload.viewed = user[0].viewed;
+        payload.saved = user[0].saved;
+      }
+      return payload;
     } catch (error) {
       return { error: 'An error occured' };
     }
