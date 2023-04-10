@@ -33,7 +33,7 @@ export class PostsController {
   @Post('upload')
   async create(@Req() req: Request) {
     try {
-      const user = await this.userServise.getUser(req.cookies.token);
+      const user = await this.userServise.getUser(req.headers.token as string);
       const payload = req.body;
       if (user.userId) {
         const postUser = await this.userServise.findUserId(user.userId);
@@ -103,7 +103,7 @@ export class PostsController {
     @Req() req: Request,
   ) {
     try {
-      const user = await this.userServise.getUser(req.cookies.token);
+      const user = await this.userServise.getUser(req.headers.token as string);
       if (user.userId) {
         return this.postsService.update(postId, updatePostDto);
       } else {

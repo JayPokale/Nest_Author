@@ -69,7 +69,7 @@ export class UsersController {
 
   @Get('this')
   async getUser(@Req() req: Request) {
-    return this.usersService.getUser(req.cookies.token);
+    return this.usersService.getUser(req.headers.token as string);
   }
 
   @Post()
@@ -81,20 +81,11 @@ export class UsersController {
     }
   }
 
-  @Get('checktoken')
-  async checktoken(@Req() req: Request) {
-    console.log(req.headers);
-    return req.headers;
-    // try {
-    //   return this.usersService.jwtVerify(req.cookies.token);
-    // } catch {}
-  }
-
   @Get('user/:userid')
   async userProfile(@Param('userid') userid: string, @Req() req: Request) {
     try {
-      if (req.cookies.token)
-        var { userId } = await this.usersService.jwtVerify(req.cookies.token);
+      const token = req.headers.token as string;
+      if (token) var { userId } = await this.usersService.jwtVerify(token);
       const user = await this.usersService.findUserId(userid);
       if (!user.length || user[0].blocked) return { error: 'An error occured' };
       const payload: any = {
