@@ -83,8 +83,10 @@ export class UsersController {
 
   @Get('checktoken')
   async checktoken(@Req() req: Request) {
-    console.log(req.cookies.token);
-    return this.usersService.jwtVerify(req.cookies.token);
+    console.log(req.headers);
+    // try {
+    //   return this.usersService.jwtVerify(req.cookies.token);
+    // } catch {}
   }
 
   @Get('user/:userid')
